@@ -13,6 +13,10 @@
 		265E5D4A298AEF9C00916CC5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 265E5D48298AEF9C00916CC5 /* Main.storyboard */; };
 		265E5D4C298AEF9E00916CC5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 265E5D4B298AEF9E00916CC5 /* Assets.xcassets */; };
 		265E5D4F298AEF9E00916CC5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 265E5D4D298AEF9E00916CC5 /* LaunchScreen.storyboard */; };
+		268617FE299188280061A30A /* Estructuras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268617FD299188280061A30A /* Estructuras.swift */; };
+		26861800299195210061A30A /* ContactoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268617FF299195210061A30A /* ContactoTableViewCell.swift */; };
+		26861802299197E80061A30A /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26861801299197E80061A30A /* ChatViewController.swift */; };
+		26CC187C2993C3C200990907 /* chatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26CC187B2993C3C200990907 /* chatTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +29,10 @@
 		265E5D4E298AEF9E00916CC5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		265E5D50298AEF9E00916CC5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		265E5D76298AF97300916CC5 /* Chat NoGPT.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Chat NoGPT.entitlements"; sourceTree = "<group>"; };
+		268617FD299188280061A30A /* Estructuras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Estructuras.swift; sourceTree = "<group>"; };
+		268617FF299195210061A30A /* ContactoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactoTableViewCell.swift; sourceTree = "<group>"; };
+		26861801299197E80061A30A /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		26CC187B2993C3C200990907 /* chatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chatTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +68,11 @@
 				265E5D76298AF97300916CC5 /* Chat NoGPT.entitlements */,
 				265E5D42298AEF9C00916CC5 /* AppDelegate.swift */,
 				265E5D44298AEF9C00916CC5 /* SceneDelegate.swift */,
+				268617FD299188280061A30A /* Estructuras.swift */,
 				265E5D46298AEF9C00916CC5 /* ViewController.swift */,
+				26861801299197E80061A30A /* ChatViewController.swift */,
+				268617FF299195210061A30A /* ContactoTableViewCell.swift */,
+				26CC187B2993C3C200990907 /* chatTableViewCell.swift */,
 				265E5D48298AEF9C00916CC5 /* Main.storyboard */,
 				265E5D4B298AEF9E00916CC5 /* Assets.xcassets */,
 				265E5D4D298AEF9E00916CC5 /* LaunchScreen.storyboard */,
@@ -141,7 +153,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				265E5D47298AEF9C00916CC5 /* ViewController.swift in Sources */,
+				268617FE299188280061A30A /* Estructuras.swift in Sources */,
+				26CC187C2993C3C200990907 /* chatTableViewCell.swift in Sources */,
 				265E5D43298AEF9C00916CC5 /* AppDelegate.swift in Sources */,
+				26861800299195210061A30A /* ContactoTableViewCell.swift in Sources */,
+				26861802299197E80061A30A /* ChatViewController.swift in Sources */,
 				265E5D45298AEF9C00916CC5 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
