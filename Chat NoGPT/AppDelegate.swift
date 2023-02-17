@@ -11,9 +11,11 @@ import UserNotifications
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+    
+    public var viewController : ViewController?
+    public var chatViewController : ChatViewController?
 
     let defaults = UserDefaults.standard
-
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -21,19 +23,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         UNUserNotificationCenter.current().delegate = self
                 
+        let notificationOption = launchOptions?[.remoteNotification]
+        
         return true
         
-        let notificationOption = launchOptions?[.remoteNotification]
-
-        // Comprueba que hay contenido en launchOptions, en tal caso la aplicación se ha lanzado desde la notificación
-
-        if let notification = notificationOption as? [String: AnyObject],
-
-        let aps = notification["aps"] as? [String: AnyObject] {
-
-        //Aquí manejamos la notificación según poceda
-
-        }
     }
 
     // MARK: UISceneSession Lifecycle
@@ -92,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let tokenParts = deviceToken.map{ data in String(format:"%02.2hhx",data)}
         let token = tokenParts.joined()
         defaults.set(token, forKey: "miToken")
-        print(defaults.string(forKey: "miToken"))
+        print(defaults.string(forKey: "miToken")!)
         print("Device token:\(token)")
     }
     
@@ -107,9 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             return
         }
         print(aps)
-        print("El sonido es \(aps["alert"])")
-        
-        
+        print("El sonido es \(aps["alert"]!)")
         
         
         guard let notif = userInfo as? [String:AnyObject] else {
@@ -118,12 +109,90 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         
         print("Este es el \(notif)")
-        print(notif["aps"]!["alert"])
+        
+        //Modificar el Budge
+        if let pushBadgeNumber:Int = aps["badge"] as? Int{
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "BadgeChanged"), object: nil)
+            UIApplication.shared.applicationIconBadgeNumber = pushBadgeNumber
+        }
+        
+        //defaults.set(notif["aps"]!["alert"], forKey: "mensaje")
+        
+        //Comprobar si existe UserDefaults.standard.array(forKey: "contactos")
+        // Decodificamos de nuevo el array contactos almacenado en UserDefaults
+        if let data = UserDefaults.standard.data(forKey: "contactos"),
+           var contactos = try? JSONDecoder().decode([Contacto].self, from: data) {
+            let nombreUsuario = notif["remitente"]
+            // Comprobar si el contacto existe
+            print("Existe contactos")
+            
+            var existe = false
+            var i = 0
 
-        
-        defaults.set(notif["aps"]!["alert"], forKey: "mensaje")
-        
+             for contacto in contactos {
+                
+                if nombreUsuario! as! String == contacto.nombreUsuario{
+                    print(contactos[i].nombreUsuario)
+                    // Como el usuario existe, le añadimos el mensaje a la información de su Contacto
+                    contactos[i].mensajes.append(Mensaje(
+                        usuario: notif["remitente"] as! String,
+                        texto: notif["aps"]!["alert"] as! String,
+                        hora: notif["hora"] as! String)
+                    )
+                    existe = true
+                    
+                    break
+                }
+                i += 1
+            }
+            
+            // Si no existe el contacto creamos uno nuevo y se lo añadimos al UserDefaults
+            if !existe{
+                contactos.append(
+                    Contacto(
+                        nombreUsuario: notif["remitente"] as! String,
+                        token: notif["tokenRemitente"] as! String,
+                        mensajes: [
+                            Mensaje(usuario: notif["remitente"] as! String,
+                                    texto: notif["aps"]!["alert"] as! String,
+                                    hora: notif["remitente"] as! String),
+                        ]
+                    )
+                )
+            }
+            
+            //Codificar a Json
+            do {
+                let data = try JSONEncoder().encode(contactos)
+                UserDefaults.standard.set(data, forKey: "contactos")
+            } catch {
+                print("Error al codificar el array de contactos: \(error)")
+            }
+            
+            // Recarga los datos en el tableView del ViewController con el nombre del nuevo usuario que nos ha escrito
+            viewController?.tableView.reloadData()
+            chatViewController?.tableView.reloadData()
+            
+        }else {
+            print("Creamos el array de contactos")
+            let contactos = [Contacto(nombreUsuario : notif["remitente"]! as! String ,
+                                      token : notif["tokenRemitente"] as! String,
+                                      mensajes : [Mensaje(usuario: notif["remitente"] as! String , texto : notif["aps"]!["alert"] as! String, hora: notif["hora"] as! String)
+                                                 ]
+                                     )]
+            //Codificar a Json
+            do {
+                let data = try JSONEncoder().encode(contactos)
+                UserDefaults.standard.set(data, forKey: "contactos")
+            } catch {
+                print("Error al codificar el array de contactos: \(error)")
+            }
+            print("ya hemos creado el array de contactos")
+        }
     }
+    
+ 
+
 
 
 }

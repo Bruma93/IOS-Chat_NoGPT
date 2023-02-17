@@ -9,13 +9,14 @@ import Foundation
 
 
 struct Contacto : Codable{
-    let clave : String
+    let nombreUsuario : String
     let token : String
-    let mensajes : [Mensaje]
+    var mensajes : [Mensaje]
 }
 
 struct Mensaje : Codable{
     let usuario : String
     let texto : String
+    let hora : String
 }
 

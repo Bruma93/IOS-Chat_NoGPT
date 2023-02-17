@@ -9,36 +9,34 @@ import UIKit
 
 class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
     
+    
     @IBOutlet weak var tableView: UITableView!
     let defaults = UserDefaults.standard
     
-    
-    var juan = Contacto(clave : "Jesús",token: "991c301356023c2c06fdd7a91844561448417498ca974304c0980a924c34165e", mensajes: [
-        Mensaje(usuario: "Jesús",
-                texto:"Te vienes?"),
-        Mensaje(usuario:"yo", texto:"No puedo tio")
-    ])
-    
-    var contactos : [Contacto] = []
-    
+    var contactosAlmacenados : [Contacto] = []
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        var miNick = defaults.string(forKey: "miNick")
         
-        comprobarNick(nick : miNick)
+        //conexion con la vista
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.viewController = self
         
-        // Do any additional setup after loading the view.
-        contactos.append(juan)
-        
-        var mensaje = defaults.string(forKey: "mensaje")
-        print(mensaje)
-
-        
+        comprobarNick()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let data = UserDefaults.standard.data(forKey: "contactos"),
+            let contactos = try? JSONDecoder().decode([Contacto].self, from: data) {
+            print("SDFDSFSDFFSDFSDSDF\(contactos)")
+            contactosAlmacenados = contactos
+            tableView.reloadData()
+        }
+    }
+    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -46,15 +44,14 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     
     // Número de filas por sección
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return contactos.count
+        return contactosAlmacenados.count
         
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "ModeloCeldaContacto", for: indexPath) as! ContactoTableViewCell
         
-        cell.nombreContacto.text = contactos[indexPath.row].clave
-        
+        cell.nombreContacto.text = contactosAlmacenados[indexPath.row].nombreUsuario
         return cell
     }
     
@@ -65,16 +62,20 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     // Asegurarnos antes de hacer el segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? ChatViewController {
-            destination.contacto = contactos[tableView.indexPathForSelectedRow!.row]
+            //destination.contacto = contactosAlmacenados[tableView.indexPathForSelectedRow!.row]
+            destination.index = tableView.indexPathForSelectedRow!.row
         }
     }
     
-    func comprobarNick(nick: String?){
-        if let name = UserDefaults.standard.string(forKey: "miNick") {
-            print(nick)
+    // Función para comprobar si al abir la aplicación, el usuario tiene un nick asignado
+    func comprobarNick(){
+        
+        if let _ = UserDefaults.standard.string(forKey: "miNick") {
+            
         } else {
             showAlert()
         }
+
     }
     
     func showAlert(){

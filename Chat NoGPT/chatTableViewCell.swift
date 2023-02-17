@@ -11,13 +11,12 @@ class chatTableViewCell: UITableViewCell {
 
 
     @IBOutlet weak var mensajeLabel: UILabel!
+    @IBOutlet weak var horaLabel: UILabel!
     
-    @IBOutlet weak var svMensaje: UIStackView!
-    
+    @IBOutlet weak var vista: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-    }
+        vista.layer.cornerRadius=20    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
